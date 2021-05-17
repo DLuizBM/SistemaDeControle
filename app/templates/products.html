@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <title>Produtos</title>
+</head>
+<body>
+
+  {% if user.is_authenticated %}
+  <header class="header">
+      <button id="registerbutton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#createProductModal" data-whatever="">Cadastrar</button>
+      <div class="modal fade" id="createProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="createProductModal">Cadastrar produto</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="post" action="{% url 'create-product' %}">
+                          {% csrf_token %}
+                          {{ form.price.errors }}
+                          <div class="form-group">
+                              <label for="id_name" class="col-form-label">Nome:</label>
+                              <input type="text" class="form-control" id="id_name" name="name" value="{{ product.name }}">
+                          </div>
+                          <div class="form-group">
+                              <label for="id_price" class="col-form-label">Preço:</label>
+                              <input class="form-control" id="id_price" name="price" value="{{ product.price }}">
+                          </div>
+                          <div class="form-group">
+                              <label for="id_stock" class="col-form-label">Estoque:</label>
+                              <input class="form-control" id="id_stock" name="stock" value="{{ product.stock }}">
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                              <button type="submit" class="btn btn-primary">Cadastrar</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </header>
+  <main>
+  <h1>Produtos</h1>
+  <div class="order">
+      <span id="labelOrder">Ordernar por: </span>
+      <a href="{% url 'order_name' %}"><button id="name" class="btn btn-primary" onclick="orderByName()">Nome</button></a>
+      <a href="{% url 'order_price' %}"><button id="price" class="btn btn-primary">Preço</button></a>
+      <a href="{% url 'order_stock' %}"><button id="stock" class="btn btn-primary">Estoque</button></a>
+  </div>
+<!--
+    <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nome</td>
+                <td>Preço</td>
+                <td>Estoque</td>
+                <td>Editar</td>
+                <td>Excluir</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.stock }}</td>
+            <td>Edit</td>
+            <td>
+                <a href="{% url 'del' product.pk %}">
+                    <button>Delete</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    -->
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Estoque</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    <!--para que cada madel funcione para cada valor específico quando está editando
+                        é preciso que cada model tenha seu id, por isso, foi passado
+                        data-target="#exampleModal{{ product.pk }}" data-whatever="{{ product.pk }}"
+                        id="exampleModal{{ product.pk }}"
+                        especificando o id do modal para que ele pegue os dados do objeto correto
+                    -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProductModal{{ product.pk }}" data-whatever="{{ product.pk }}">Editar</button>
+                    <div class="modal fade" id="editProductModal{{ product.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="editProductModal">Editar produto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form method="post" action="{% url 'edit' product.pk %}">
+                                  {% csrf_token %}
+                                  <div class="form-group">
+                                    <label for="id_name" class="col-form-label">Nome:</label>
+                                    <input type="text" class="form-control" id="id_name" name="name" value="{{ product.name }}">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="id_price" class="col-form-label">Preço:</label>
+                                    <input class="form-control" id="id_price" name="price" value="{{ product.price }}">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="id_stock" class="col-form-label">Estoque:</label>
+                                    <input class="form-control" id="id_stock" name="stock" value="{{ product.stock }}">
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Editar</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                </td>
+                <td>
+                    <a href="{% url 'del' product.pk %}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </main>
+  {% else %}
+        <h2 style="padding-left: 15%; margin-top: 20%;">Você não está logado. Faça login para visualizar a página.</h2>
+        <a style="margin-left: 45%;" class="btn btn-primary" href="{% url 'login' %}">Login</a>
+  {% endif %}
+</body>
+<script src="{% static 'js/products.js' %}" ></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</html>

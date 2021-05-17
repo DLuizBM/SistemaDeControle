@@ -1,0 +1,14 @@
+
+* {
+    padding: 0px 80px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#registerButton{
+   width: 50%;
+   margin-left: 25%;
+   margin-bottom: 10px;
+}

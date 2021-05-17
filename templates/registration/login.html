@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+<!--https://ultimatedjango.com/learn-django/lessons/create-the-login-template/-->
+    <form id="login-form" class="form-signin" method="post" autocomplete="off" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Fazer Login</h1>
+
+        <input id="id_username" name="username" type="text" class="form-control" placeholder="Informe seu e-mail" required autofocus>
+        <input id="id_password" name="password" type="password" class="form-control" placeholder="Informe sua senha">
+         {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+              Usuário ou senha incorretos. Por favor, tente novamente.
+            </div>
+         {% endif %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        <a href="{% url 'register' %}">Cadastre-se!</a>
+        <p class="mt-5 mb-3 text-muted">&copy; {% now 'Y'%}</p>
+    </form>
+<!--
+o diretório registration é necessário, pois o django procura esse diretório
+e dentro dele a página login.html
+-->
+
+{% endblock %}
