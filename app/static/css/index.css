@@ -49,6 +49,10 @@ main {
     font-size: 30px;
 }
 
+#inLabel {
+    font-size: 30px;
+}
+
 .form-control {
     text-align: center;
 }

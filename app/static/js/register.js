@@ -4,10 +4,15 @@ function getFieldCep(){
 }
 
 function fillAddressFields(response){
-    document.getElementById('id_address').value = response.logradouro;
-    document.getElementById('id_district').value = response.bairro;
-    document.getElementById('id_city').value = response.localidade;
-    document.getElementById('id_state').value = response.uf;
+    if (response.cep == undefined){
+        alert('Atenção: CEP inválido')
+    }
+    else {
+        document.getElementById('id_address').value = response.logradouro;
+        document.getElementById('id_district').value = response.bairro;
+        document.getElementById('id_city').value = response.localidade;
+        document.getElementById('id_state').value = response.uf;
+    }
 }
 
 function getAddressFields() {

@@ -49,43 +49,15 @@
       </div>
   </header>
   <main>
+
   <h1>Produtos</h1>
+
   <div class="order">
       <span id="labelOrder">Ordernar por: </span>
       <a href="{% url 'order_name' %}"><button id="name" class="btn btn-primary" onclick="orderByName()">Nome</button></a>
       <a href="{% url 'order_price' %}"><button id="price" class="btn btn-primary">Preço</button></a>
       <a href="{% url 'order_stock' %}"><button id="stock" class="btn btn-primary">Estoque</button></a>
   </div>
-<!--
-    <table>
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Nome</td>
-                <td>Preço</td>
-                <td>Estoque</td>
-                <td>Editar</td>
-                <td>Excluir</td>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-        <tr>
-            <td>{{ product.id }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.stock }}</td>
-            <td>Edit</td>
-            <td>
-                <a href="{% url 'del' product.pk %}">
-                    <button>Delete</button>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    -->
 
     <table class="table">
         <thead class="thead-light">
@@ -106,12 +78,6 @@
                 <td>{{ product.price }}</td>
                 <td>{{ product.stock }}</td>
                 <td>
-                    <!--para que cada madel funcione para cada valor específico quando está editando
-                        é preciso que cada model tenha seu id, por isso, foi passado
-                        data-target="#exampleModal{{ product.pk }}" data-whatever="{{ product.pk }}"
-                        id="exampleModal{{ product.pk }}"
-                        especificando o id do modal para que ele pegue os dados do objeto correto
-                    -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProductModal{{ product.pk }}" data-whatever="{{ product.pk }}">Editar</button>
                     <div class="modal fade" id="editProductModal{{ product.pk }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
@@ -145,7 +111,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                    </div>
                 </td>
                 <td>
                     <a href="{% url 'del' product.pk %}">

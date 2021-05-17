@@ -13,7 +13,7 @@
 <body class="text-center" onload="getYear()">
 
     <header class="header">
-        <a id="home" class="btn btn-primary" href="{% url 'index' %}">Home</a>
+        <a id="home" class="btn btn-primary" href="{% url 'home' %}">Home</a>
         <a id="login" class="btn btn-primary" href="{% url 'login' %}">Login</a>
         <a id="register" class="btn btn-primary" href="{% url 'register' %}">Cadastrar</a>
     </header>
@@ -30,7 +30,11 @@
               </div>
               <div class="form-group">
                 <label id="gitLabel" for="formGroupExampleInput3">GitHub</label>
-                <input type="text" readonly class="form-control" id="formGroupExampleInput3" value="divino.lzbm@gmail.com">
+                <input type="text" readonly class="form-control" id="formGroupExampleInput3" value="https://github.com/DLuizBM">
+              </div>
+              <div class="form-group">
+                <label id="inLabel" for="formGroupExampleInput3">LinkedIn</label>
+                <input type="text" readonly class="form-control" id="formGroupExampleInput3" value="https://www.linkedin.com/in/divino-luiz-barbosa-moreira-961082194/">
               </div>
             </form>
     </main>

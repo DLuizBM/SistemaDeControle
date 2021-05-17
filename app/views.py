@@ -7,11 +7,11 @@ from django.contrib import messages
 
 
 def product_view(request):
-    if request.method == "GET":
-        context = {
-            'products': Product.objects.all()
-        }
-        return render(request, 'products.html', context)
+    products = Product.objects.all()
+    context = {
+        'products': products
+    }
+    return render(request, 'products.html', context)
 
 
 def create_product_view(request):
@@ -22,7 +22,7 @@ def create_product_view(request):
             messages.success(request, 'Produto salvo com sucesso!')
             return redirect('products')
         else:
-            messages.error(request, 'Erro ao enviar e-mail :(.')
+            messages.error(request, 'Erro ao cadastrar produto.')
 
 
 def update_product_view(request, pk):
@@ -30,16 +30,11 @@ def update_product_view(request, pk):
     form = ProductForm(request.POST or None, instance=product)
     if request.method == "POST":
         if form.is_valid():
-            """
-            print "Body"
-            print request.body
-            print "POST"
-            print request.POST
-            print "FORM"
-            print form
-            """
             form.save()
+            messages.success(request, 'Produto atualizado com sucesso!')
             return redirect('products')
+        else:
+            messages.error(request, 'Erro ao atualizar produto.')
 
 
 def delete_product_view(request, pk):
@@ -50,18 +45,18 @@ def delete_product_view(request, pk):
 
 
 def register_view(request):
+    form = CustomUserCreationForm(request.POST or None)
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST or None)
         if form.is_valid():
             form.save()
             form = CustomUserCreationForm()
-            return render(request, 'index.html')
+            return redirect('index')
         else:
             messages.error(request, 'Erro ao cadastrar usuário.')
     else:
         form = CustomUserCreationForm()
 
-    context = { # context deve estar fora do if e else
+    context = {
         'form': form
     }
     return render(request, 'register.html', context)
